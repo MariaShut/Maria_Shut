@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ANKETA</title>
+  </head>
+  <body>
+    <script>
+      "use strict";
+
+      // user's full name
+      let lastName = prompt("Введите вашу фамилию:");
+      while (lastName === null || lastName === "") {
+        lastName = prompt("Пожалуйста, введите вашу фамилию!");
+      }
+      console.log(lastName);
+
+
+      let firstName = prompt("Введите ваше имя:");
+      while (firstName === null || firstName === "") {
+        firstName = prompt("Ваше имя?");
+      }
+      console.log(firstName);
+
+
+      let fathersName;
+      do {
+        fathersName = prompt("Введите ваше отчество:");
+      } while (fathersName === null || fathersName === "")
+      console.log(fathersName);
+
+
+      // user's age
+      let age = parseInt( prompt("Ваш возраст в годах:") );
+
+      function checkAge() {
+        while ( isNaN(age) )
+          age = parseInt( prompt("Введены некорректные данные! Укажите ваш возраст в годах (цифрами)") );
+        return age;
+      }
+      checkAge();
+      console.log(age);
+
+
+      // user's gender
+      let gender;
+      const askGender = confirm("Ваш пол - мужской? (если женский нажмите \"отмена\")");
+
+      (askGender === true) ?  gender = "мужской" : gender = "женский";
+
+      console.log(gender);
+
+
+      // is user retired?
+      let retiree = "вы на пенсии: ";
+
+      switch (true) {
+        case ( (gender === "мужской") && (age < 63) ):
+          retiree += "нет";
+          break;
+        case ( (gender === "мужской") && (age >= 63) ):
+          retiree += "да";
+          break;
+        case ( (gender === "женский") && (age < 58) ):
+          retiree += "нет";
+          break;
+        case ( (gender === "женский") && (age >= 58) ):
+          retiree += "да";
+          break;
+      }
+      console.log(retiree);
+
+      alert(`
+      ваше ФИО: ${lastName} ${firstName} ${fathersName}
+      ваш возраст в годах: ${age}
+      ваш возраст в днях: ${age * 365}
+      через 5 лет вам будет: ${age + 5}
+      ваш пол: ${gender}
+      ${retiree}`);
+    </script>
+  </body>
+</html>
