@@ -5,16 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="icon" href="favicon.ico">
     <style>
         body {
             background-color: #D0D98F;
+            color: white;
+        }
+
+        h2 {
+            margin: 60px 0 20px;
+            font-family: Helvetica, Arial, sans-serif;
+            text-transform: lowercase;
+            color: #707C4F;
         }
 
         a {
             color: #414463;
             text-decoration: none;
             text-shadow: 4px 2px 0 #D4C3AF;
-            font-size: 32pt;
+            font-size: 28pt;
             margin: 5px 0;
         }
 
@@ -32,13 +41,36 @@
             align-items: center;
             padding: 5%;
         }
+
+        .checked {
+            color: #B2B6BF;
+        }
+
+        .additional {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            width: 60%;
+        }
     </style>
 </head>
 <body>
     <div class="flex-container">
-        <a href="home/ANKETA/anketa.html">ANKETA</a>
-        <a href="home/TREESUM/treeSum.JS">TREESUM</a>
-        <a href="home/VOWELS/vowels.html">VOWELS</a>
+        <a href="home/ANKETA/anketa.html" target="_blank" class="checked">ANKETA (проверено)</a>
+        <a href="home/TREESUM/treeSum.JS" target="_blank" class="checked">TREESUM (проверено)</a>
+        <a href="home/VOWELS/vowels.html" target="_blank" class="checked">VOWELS (проверено)</a>
+        <a href="home/ROOTS/roots.html" target="_blank">ROOTS</a>
+        <a href="home/MOOD/mood.html" target="_blank">MOOD</a>
+
+        <h2>Дополнительные задания:</h2>
+
+        <div class="additional">
+            <a href="home/Additional/a2.html" target="_blank">A2+</a>
+            <a href="home/Additional/a3.html" target="_blank">A3+</a>
+            <a href="home/Additional/a4.html" target="_blank">A4+</a>
+            <a href="home/Additional/b1.html" target="_blank">B1+</a>
+            <a href="home/Additional/b2.html" target="_blank">B2+</a>
+        </div>
     </div>
 </body>
 </html>
