@@ -1,0 +1,30 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vowels(forEach)</title>
+    </head>
+    <body>
+        <script>
+            const askForString = prompt("Рассчитать количество русских гласных:");
+
+            function calcVowels(string) {
+                const vowelsArr = string.toLowerCase().split("");
+                const ruVowels = ["а", "е", "ё", "и", "о", "у", "ы", "э", "ю", "я"];
+                let numberOfVowels = 0;
+
+                const checkForVowels = (char) => {
+                    if( ruVowels.indexOf(char) !== -1 ) { numberOfVowels++; }
+                };
+    
+                vowelsArr.forEach(checkForVowels);
+                return numberOfVowels;
+            }
+
+            console.log(`Введённый текст: ${askForString}`);
+            console.log(`Количество гласных: ${ calcVowels(askForString) }`);           
+        </script>
+    </body>
+    </html>

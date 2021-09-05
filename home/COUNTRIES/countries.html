@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries</title>
+    <link rel="stylesheet" href="../DRINKS/styles.css">
+</head>
+<body>
+    <div>
+        <input type="button" value="ввод информации о стране" onclick="addCountry()">
+        <input type="button" value="получение информации о стране" onclick="getCountryInfo()">
+        <input type="button" value="перечень всех стран" onclick="listCountries()">
+        <input type="button" value="удаление информации о стране" onclick="deleteCountry()">
+    </div>
+
+    <script>
+        const countriesH = {};
+
+        function addCountry( countryName, capitalName ) {
+            countryName = prompt("Введите название страны:");
+            capitalName = prompt("Столица:");
+
+            countriesH[countryName] = capitalName;
+        }
+
+        function getCountryInfo(countryName) {
+            countryName = prompt("Укажите страну:");
+            
+            if ( countryName in countriesH )
+                console.log(`страна: ${countryName}, столица: ${ countriesH[countryName] }`);
+            else
+                console.log(`Нет информации о стране "${countryName}"!`);
+        }
+
+        function deleteCountry(countryName) {
+            countryName = prompt("Укажите страну, информацию о которой хотите удалить");
+
+            delete countriesH[countryName];
+        }
+
+        function listCountries() {
+            for (let CN in countriesH)
+                console.log(`страна: ${CN}, столица: ${ countriesH[CN] }`);
+        }
+    </script>
+    
+</body>
+</html>

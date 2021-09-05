@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRINK_HASH_FUNC</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div>
+        <input type="button" value="ввод информации о напитке" onclick="addValue()">
+        <input type="button" value="получение информации о напитке" onclick="getValue()">
+        <input type="button" value="удаление информации о напитке" onclick="deleteValue()">
+        <input type="button" value="перечень всех напитков" onclick="getDrinksList()">
+    </div>
+    
+    <script>
+        "use strict"
+
+        // Constructor Function
+        function HashStorageFunc() {
+
+            const self = this;
+            self.storage = {};
+
+            // сохранить указанное значение под указанным ключом
+            self.addValue = function( key, value ) {
+                self.storage[key] = value;
+            }
+
+            // вернуть значение по указаному ключу
+            self.getValue = function(key) {
+                return self.storage[key];
+            }
+            
+            // удалить значение с указанным ключом
+            self.deleteValue = function(key) {
+
+                if (key in self.storage) {
+                    delete self.storage[key];
+                    return true; // значение было удалено
+                } else {
+                    return false; // такого значения не было в хранилище
+                }
+
+            }
+
+            // вернуть массив, состоящий из одних ключей
+            self.getKeys = function() {
+                return Object.keys(self.storage);
+            }
+        }
+
+        // рецепты напитков
+        const drinkStorage = new HashStorageFunc();
+
+        function addValue() {
+            const drinkName = prompt("Название напитка:", " ");
+
+            let isAlco = confirm("Напиток алкогольный?");
+            (isAlco) ? isAlco = "да" : isAlco = "нет";
+
+            const recipe = prompt("Рецепт приготовления:", " ");
+
+            drinkStorage.addValue( drinkName, { isAlco, recipe } );
+        }
+
+        function getValue() {
+            const drinkName = prompt("Название напитка:", " ");
+
+            const info = drinkStorage.getValue(drinkName);
+
+            if (info)
+                alert("Напиток: " + drinkName + "\n\r" + "Алкогольный: " + info.isAlco + "\n\r" + "Рецепт приготовления: " + info.recipe);
+            else
+                alert("Нет информации по выбранному напитку.");
+        }
+
+        function deleteValue() {
+            const drinkName = prompt("Название напитка:", " ");
+
+            const del = drinkStorage.deleteValue(drinkName);
+
+            if (del)
+                alert("Информация о напитке " + "\"" + drinkName + "\"" + " удалена.");
+            else
+                alert("Отсутствует информация по напитку " + "\"" + drinkName + "\"");
+
+        }
+
+        function getDrinksList() {
+            const drinksList = drinkStorage.getKeys();
+
+            (drinksList.length > 0) ? alert(drinksList) : alert("В списке нет напитков.");
+        }
+
+    </script>
+    
+</body>
+</html>
