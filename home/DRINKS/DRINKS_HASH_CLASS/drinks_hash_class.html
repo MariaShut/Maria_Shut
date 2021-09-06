@@ -36,14 +36,12 @@
             
             // удалить значение с указанным ключом
             deleteValue(key) {
-
                 if (key in this.storage) {
                     delete this.storage[key];
                     return true; // значение было удалено
                 } else {
                     return false; // такого значения не было в хранилище
                 }
-
             }
 
             // вернуть массив, состоящий из одних ключей
@@ -78,25 +76,22 @@
                 Рецепт приготовления: ${info.recipe}`);
             } else {
                 alert("Нет информации по выбранному напитку.");
-            }
-                
+            }   
         }
 
         function deleteValue() {
             const drinkName = prompt("Название напитка:", " ");
-
             const del = drinkStorage.deleteValue(drinkName);
 
             if (del)
                 alert(`Информация о напитке "${drinkName}" удалена.`);
             else
                 alert(`Отсутствует информация по напитку "${drinkName}".`);
-
         }
 
         function getDrinksList() {
             const drinksList = drinkStorage.getKeys();
-
+            
             (drinksList.length > 0) ? alert(drinksList) : alert("В списке нет напитков.");
         }
 

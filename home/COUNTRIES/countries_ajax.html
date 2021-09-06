@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countries</title>
+    <title>Countries_ajax</title>
     <link rel="stylesheet" href="../DRINKS/styles.css">
 </head>
 <body>
@@ -31,7 +31,7 @@
             console.log(capitalName);
 
             $.ajax("https://fe.it-academy.by/AjaxStringStorage2.php",
-                { f:'INSERT', n:countryName, v:JSON.stringify(capitalName), success:success, error:errorHandler }
+                { f:'INSERT', data:JSON.stringify({n:countryName, v:capitalName,}), success:success, error:errorHandler }
             );
         }
 
@@ -55,10 +55,7 @@
                 console.log(`страна: ${CN}, столица: ${ countriesH[CN] }`);
         }
 
-        let countriesH2 = JSON.parse( JSON.stringify(countriesH) );
-
-
-
+        // AJAX
         function success(data) {
             console.log('загруженные через AJAX данные:');
             console.log(data);
