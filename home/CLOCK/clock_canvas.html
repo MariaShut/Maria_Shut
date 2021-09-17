@@ -46,6 +46,16 @@
                 ctx.textBaseline = "middle";
                 ctx.fillText(i,nx,ny); //рисуем на холсте текст с заливкой.
             }
+            
+            // ЭЛЕКТРОННЫЕ ЧАСЫ        
+            const time = new Date ();
+            const currTime = time.toLocaleTimeString();
+            ctx.beginPath();
+            ctx.font = "24px sans-serif";
+            ctx.textBaseline = "middle";
+            ctx.fillText(currTime, clockX, clockY - radiusClock / 2.5);
+            ctx.fill();
+            ctx.closePath();
 
             // СТРЕЛКИ
             // -часовая
@@ -80,16 +90,6 @@
             ctx.lineTo(clockX + secondLength * Math.sin(secondAngular/180*Math.PI), clockY - secondLength * Math.cos(secondAngular / 180 * Math.PI));
             ctx.lineWidth = arrowWidth / 4;
             ctx.stroke();
-            ctx.closePath();
-            
-            // ЭЛЕКТРОННЫЕ ЧАСЫ        
-            const time = new Date ();
-            const currTime = time.toLocaleTimeString();
-            ctx.beginPath();
-            ctx.font = "24px sans-serif";
-            ctx.textBaseline = "middle";
-            ctx.fillText(currTime, clockX, clockY - radiusClock / 2.5);
-            ctx.fill();
             ctx.closePath();
 
             setTimeout(updateClock, 1020 - time.getMilliseconds());
