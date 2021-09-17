@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLOCK_CANVAS</title>
+</head>
+<body>
+    <canvas id="clock" width="400" height="400"></canvas>
+    <script>
+        function updateClock () {
+            const wrap = document.getElementById("clock");
+            const ctx = wrap.getContext("2d");
+            const radiusClock = 198;
+            const sizeNumbers = radiusClock / 8;
+            const clockX = wrap.offsetWidth / 2;
+            const clockY = wrap.offsetHeight / 2;
+            const arrowWidth = radiusClock / 20;
+
+            // основание часов: жёлтый круг
+            ctx.beginPath();
+            ctx.fillStyle = "#FCDF80";
+            ctx.arc(clockX, clockY, radiusClock, 0,Math.PI*2, false); //рисуем дугу окружности
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.closePath();
+
+            const r = radiusClock - sizeNumbers * 1.8; //позиционируем кружки часов относительно циферблата
+            const numbersCenterX = radiusClock;
+            const numbersCenterY = radiusClock;
+
+            for (let i=1; i<=12; i++) {
+                const angle = i / 12 * Math.PI * 2;
+                const nx = numbersCenterX + Math.sin(angle) * r;
+                const ny = numbersCenterY - Math.cos(angle) * r;
+
+                ctx.beginPath();
+                ctx.arc(nx, ny, sizeNumbers, 0, 2 * Math.PI, false);
+                ctx.fillStyle = "#2E8B57";
+                ctx.fill();
+
+                ctx.fillStyle = "black";
+                ctx.font =  "bold 20px";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(i,nx,ny); //рисуем на холсте текст с заливкой.
+            }
+
+            // СТРЕЛКИ
+            // -часовая
+            const hourAngular = 30 * (time.getHours() + (1/60) * time.getMinutes());
+            const hourLength = 70;
+            ctx.beginPath();
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "rgba(25, 25, 25, 1)";
+            ctx.moveTo(clockX, clockY);
+            ctx.lineTo(clockX + hourLength * Math.sin(hourAngular/180*Math.PI), clockY - hourLength * Math.cos(hourAngular / 180 * Math.PI));
+            ctx.lineWidth = arrowWidth / 1.2;
+            ctx.stroke();
+            ctx.closePath();
+            // -минутная
+            const minuteAngular = 6 * (time.getMinutes() + (1/60) * time.getSeconds());
+            const minuteLength = 130;
+            ctx.beginPath();
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "rgba(25, 25, 25, 1)";
+            ctx.moveTo(clockX, clockY);
+            ctx.lineTo(clockX + minuteLength * Math.sin(minuteAngular/180*Math.PI), clockY - minuteLength * Math.cos(minuteAngular / 180 * Math.PI));
+            ctx.lineWidth = arrowWidth / 2.5;
+            ctx.stroke();
+            ctx.closePath();
+            // -секундная
+            const secondAngular = 6 * time.getSeconds();
+            const secondLength = 170;
+            ctx.beginPath();
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "rgba(25, 25, 25, 1)";
+            ctx.moveTo(clockX, clockY);
+            ctx.lineTo(clockX + secondLength * Math.sin(secondAngular/180*Math.PI), clockY - secondLength * Math.cos(secondAngular / 180 * Math.PI));
+            ctx.lineWidth = arrowWidth / 4;
+            ctx.stroke();
+            ctx.closePath();
+            
+            // ЭЛЕКТРОННЫЕ ЧАСЫ        
+            const time = new Date ();
+            const currTime = time.toLocaleTimeString();
+            ctx.beginPath();
+            ctx.font = "24px sans-serif";
+            ctx.textBaseline = "middle";
+            ctx.fillText(currTime, clockX, clockY - radiusClock / 2.5);
+            ctx.fill();
+            ctx.closePath();
+
+            setTimeout(updateClock, 1020 - time.getMilliseconds());
+        }
+        updateClock();
+    </script>
+    
+</body>
+</html>
