@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DYN_FORM_VALID</title>
+</head>
+<body>
+    <form method="POST" action="http://fe.it-academy.by/TestForm.php" name="info" novalidate>
+        <fieldset>
+            <legend>Для внесения вашего сайта в каталог, заполните форму:</legend>
+
+            <label for="devsField">Разработчики:</label>
+            <input type="text" name="devs" id="devsField">
+            <span id="devsError"></span><br>
+
+            <label for="websiteField">Название сайта:</label>
+            <input type="text" name="website" id="websiteField">
+            <span id="websiteError"></span><br>
+
+            <label for="urlField">URL сайта:</label>
+            <input type="text" name="url" id="urlField" placeholder="http://">
+            <span id="urlError"></span><br>
+
+            <label for="dateField">Дата запуска сайта:</label>
+            <input type="text" name="date" id="dateField" placeholder="dd/mm/yyyy">
+            <span id="dateError"></span><br>
+
+            <label for="visitorsField">Посетителей в сутки:</label>
+            <input type="text" name="visitors" id="visitorsField">
+            <span id="visitorsError"></span><br>
+
+            <label for="emailField">E-mail для связи:</label>
+            <input type="text" name="email" id="emailField">
+            <span  id="emailError"></span><br>
+            
+            <label for="catalogField">Рубрика каталога:</label>
+            <select name="catalog" id="catalogField">
+                <option value="nothing"> </option>
+                <option value="homeTech">бытовая техника</option>
+                <option value="health">здоровье</option>
+                <option value="homeAtmosphere">домашний уют</option>
+            </select>
+            <span id="catalogError"></span><br>
+
+            <label>Размещение:
+                <input type="radio" name="placing" value="free" checked>бесплатное
+                <input type="radio" name="placing" value="pay"> платное
+                <input type="radio" name="placing" value="vip">VIP
+            </label><br>
+
+            <label for="feedbackField">Разрешить отзывы: </label>
+            <input type="checkbox" name="feedback" id="feedbackField" checked><br>
+
+            <label for="descriptionField">Описание сайта:</label><br>
+            <textarea type="text" name="description" id="descriptionField"></textarea>
+            <span class="clerfix error" id="descriptionError"></span><br>
+
+            <input type="submit" value="Опубликовать">
+        </fieldset>
+    </form>
+
+    <script>
+        function validateForm(form) {
+            const tagForm = document.forms["info"];
+            const devsField = tagForm.elements["devs"];
+            devsField.addEventListener("blur", validateDevs, false);
+            const siteField = tagForm.elements["website"];
+            siteField.addEventListener("blur", validateSite, false);
+            const urlField = tagForm.elements["url"];
+            urlField.addEventListener("blur", validateUrl, false);
+            const dateField = tagForm.elements["date"];
+            dateField.addEventListener("blur", validateDate, false);
+            const emailField = tagForm.elements["email"];
+            emailField.addEventListener("blur", validateEmail, false);
+            const visitField = tagForm.elements["visitors"];
+            visitField.addEventListener("blur", validateVisit, false);
+            const catalogField = tagForm.elements["catalog"];
+            catalogField.addEventListener("change", validateCatalog, false);
+            const descrField = tagForm.elements["description"];
+            descrField.addEventListener("blur", validateDescr, false);
+            const publishField = tagForm.elements["publish"];
+            tagForm.onsubmit = validate;
+
+            //вывод сообщений об ошибках
+            function showErrors(field, msg) {
+                document.getElementById(field).innerHTML = msg;
+                field = document.getElementById(field);
+                field.style.paddingLeft = "20px";
+                field.style.color = "red";
+            }
+
+            //убрать сообщения об ошибках
+            function hideErrors(field) {
+                document.getElementById(field).innerHTML = "";
+                field = document.getElementById(field);
+                field.style.paddingLeft = "0px";
+            }
+
+            //Поле разработчики: проверка на пустоту и числа
+            function validateDevs() {
+                const value = devsField.value;
+                if (value === "" || !isNaN(value)) {
+                    showErrors("devsError", "Укажите разработчиков!", devsField);
+                    return false;
+                } else {
+                    hideErrors("devsError");
+                    return true;
+                }
+            }
+
+            //Поле сайт: проверка на пустоту, не больше 30 символов
+            function validateSite() {
+                const value = siteField.value;
+                if (value === "" || value.length > 30) {
+                    showErrors("websiteError", "Укажите название сайта!", siteField);
+                    return false;
+                } else {
+                    hideErrors("websiteError");
+                    return true;
+                }
+            }
+
+            //Поле url: проверка на пустоту, шаблон
+            function validateUrl() {
+                const urlValue = urlField.value;
+                const regs = urlValue.match(/^((https?|ftp)\:\/\/)?([a-z0-9]{1})((\.[a-z0-9-])|([a-z0-9-]))*\.([a-z]{2,6})(\/?)$/i);
+                if (urlValue === "" || !regs) {
+                    showErrors("urlError", "Укажите правильный Url!");
+                    return false;
+                } else {
+                    hideErrors("urlError");
+                    return true;
+                }
+            }
+
+            //Поле дата: проверка на пустоту, шаблон
+            function validateDate() {
+                const dateValue = dateField.value;
+                const regs = dateValue.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/);
+                if (dateValue === "") {
+                    showErrors("dateError", "Укажите дату!");
+                    return false;
+                } else if (!regs) {
+                    showErrors("dateError", "Укажите дату в формате dd/mm/yyyy!");
+                    return false;
+                } else {
+                    hideErrors("dateError");
+                    return true;
+                }
+            }
+
+            //Поле mail: проверка на пустоту, шаблон
+            function validateEmail() {
+                const emailValue = emailField.value;
+                const regs = emailValue.match(/^\S+@[a-z]+.[a-z]+$/);
+                if (emailValue === "" || !regs) {
+                    showErrors("emailError", "Укажите правильный email!");
+                    return false;
+                } else {
+                    hideErrors("emailError");
+                    return true;
+                }
+            }
+
+            //Поле mail: проверка на пустоту, введенные числа
+            function validateVisit() {
+                const visitValue = visitField.value;
+                if (visitValue === "" || isNaN(visitValue)) {
+                    showErrors("visitorsError", "Укажите количество посетителей!");
+                    return false;
+                } else {
+                    hideErrors("visitorsError");
+                    return true;
+                }
+            }
+
+            //Поле рубрика каталога: проверка на выбранный элемент
+            function validateCatalog() {
+                const value = catalogField.value;
+                if (value === "nothing") {
+                    showErrors("catalogError", "Выберите рубрику каталога!");
+                    return false;
+                } else {
+                    hideErrors("catalogError");
+                    return true;
+                }
+            }
+
+            //Поле описание: проверка на пустоту, не больше 400 символов
+            function validateDescr() {
+                const value = descrField.value;
+                if (value === "") {
+                    showErrors("descriptionError", "Введите описание сайта!");
+                    return false;
+                } else if (value.length > 400) {
+                    showErrors("descriptionError", "Колличество знаков не должно превышать 400!");
+                    return false;
+                } else {
+                    hideErrors("descriptionError");
+                    return true;
+                }
+            }
+
+            function validate() {
+                const arrayFunc = [validateDescr(), validateVisit(), validateCatalog(), validateEmail(), validateUrl(),
+                    validateSite(), validateDate(), validateDevs()
+                ];
+                for (let i = 0; i<arrayFunc.length; i++) {
+                    blur();
+                    if (arrayFunc[i] === false) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        const form = document.getElementsByTagName("form")[0];
+        validateForm(form);
+    </script>
+</body>
+
+</html>

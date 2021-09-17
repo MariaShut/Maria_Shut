@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLOCK_DOM</title>
+    <style>
+        body {
+            font-family: arial, sans-serif;
+        }
+        #clock {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            position: relative;
+            background-color: #FCDF80;
+        }
+        #time{
+            display: flex;
+            justify-content: center;
+        }
+        #hourArrow,
+        #secondArrow,
+        #minuteArrow {
+            background-color: black;
+            border-radius: 10px;
+            transform-origin: center bottom;
+        }
+    </style>
+</head>
+<body>
+    <div id="clock">
+        <div id="time"></div>
+        <div id="hourArrow"></div>
+        <div id="minuteArrow"></div>
+        <div id="secondArrow"></div>
+    </div>
+    <script>
+        const clock = document.querySelector("#clock");
+        const radiusClock = clock.offsetWidth / 2; // радиус часов
+        const sizeNumbers = radiusClock / 4; // размер цифр
+        const arrowWidth = radiusClock / 20; // толщина стрелок
+
+        const r = radiusClock - sizeNumbers; // расстояние между цифрами и часами
+        // положение кружка с цифрами относительно циферлата
+        const numbersCenterX = radiusClock - sizeNumbers / 2;
+        const numbersCenterY = radiusClock - sizeNumbers / 2; 
+
+        for (let i=1; i<=12; i++) {
+            // отображаемый угол
+            const angle = i / 12 * Math.PI * 2; 
+            const nx = numbersCenterX - Math.cos(angle) * r;
+            const ny = numbersCenterY + Math.sin(angle) * r;
+            // стилизуем кружки
+            const numbers = document.createElement("div");
+            numbers.style.width = sizeNumbers + "px";
+            numbers.style.height = sizeNumbers + "px";
+            numbers.style.borderRadius = "50%";
+            numbers.style.backgroundColor = "#2E8B57";
+            numbers.style.position = "absolute";
+            numbers.style.top = nx +"px";
+            numbers.style.left = ny + "px";
+            // получаем текущую цифру циферблата и выравниваем её
+            numbers.textContent = i; 
+            numbers.style.textAlign = "center";
+            numbers.style.lineHeight = sizeNumbers + "px";
+            numbers.style.fontSize = sizeNumbers / 2 + "px"; // размер цифры в кружке
+            clock.appendChild(numbers);
+        }
+
+        // СТРЕЛКИ
+        // -часовая
+        const hourArrow = document.getElementById("hourArrow");
+        hourArrow.style.width = arrowWidth / 5 + "%"; // толщина 
+        hourArrow.style.height = radiusClock / 11 + "%"; // длина
+        hourArrow.style.position = "absolute";
+        hourArrow.style.bottom = radiusClock + "px";
+        hourArrow.style.left = radiusClock - arrowWidth / 2 + "px"; // положение стрелки относительно центра
+        // -минутная
+        const minuteArrow = document.getElementById("minuteArrow");
+        minuteArrow.style.width = arrowWidth / 10 + "%";
+        minuteArrow.style.height = radiusClock / 6.5 + "%";
+        minuteArrow.style.position = "absolute";
+        minuteArrow.style.bottom = radiusClock + "px";
+        minuteArrow.style.left = radiusClock - arrowWidth / 5 + "px";
+        minuteArrow.style.zIndex = "1";
+        // -секундная
+        const secondArrow = document.getElementById("secondArrow");
+        secondArrow.style.width = arrowWidth / 15 + "%";
+        secondArrow.style.height = radiusClock / 5 + "%";
+        secondArrow.style.position = "absolute";
+        secondArrow.style.bottom = radiusClock + "px";
+        secondArrow.style.left = radiusClock - arrowWidth / 5 + "px"; 
+        secondArrow.style.zIndex = "2";
+
+        // ЭЛЕКТРОННЫЕ ЧАСЫ
+        const currTime = document.getElementById("time");
+        currTime.style.position = "absolute";
+        currTime.style.left = radiusClock - radiusClock / 4 + "px"; // положение электронных часов относительно центра циферблата
+        currTime.style.top = radiusClock / 2 + "px"; // по оси Х
+        currTime.style.width = radiusClock / 2 + "px"; // по оси Y
+        currTime.style.fontSize = sizeNumbers / 2 + "px"; // размер
+
+        // обновление при перезагрузке
+        function updateClock() {
+            // получаем текущее время
+            const time = new Date();
+            currTime.innerHTML = time.toLocaleTimeString();
+
+            //определяем по времени где должны находиться стрелки
+            let secondAngular = 6 * time.getSeconds() - 6;
+            let minuteAngular = 6 * (time.getMinutes() + (1/60) * time.getSeconds());
+            let hourAngular = 30 * (time.getHours() + (1/60) * time.getMinutes());
+
+            // смещение стрелок каждую секунду
+            secondAngular += 6;
+            secondArrow.style.transform = "rotate(" + secondAngular + "deg)";
+            minuteAngular += 6 * (1/60);
+            minuteArrow.style.transform = "rotate(" + minuteAngular + "deg)";
+            hourAngular += 6 * (1/360);
+            hourArrow.style.transform = "rotate(" + hourAngular + "deg)";
+
+            setTimeout(updateClock, 1020 - time.getMilliseconds()); // планируем обновление стрелок
+        }
+        updateClock();
+    </script> 
+</body>
+</html>

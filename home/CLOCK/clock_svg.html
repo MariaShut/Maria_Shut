@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: arial, sans-serif;
+        }
+        #wrap {
+            display: inline-flex;
+        }
+        #clock {
+            border-radius: 50%;
+            position:relative;
+            background-color: #fce38a;
+
+        }
+        #hourArrow,
+        #secondArrow,
+        #minuteArrow {
+            background-color: black;
+            border-radius: 8px;
+            transform-origin: 50% 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <svg id="clock" width="400" height="400" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <script>
+            const clock = document.getElementById("clock");
+            const wrap = document.getElementById("wrap");
+            const radiusClock = wrap.offsetWidth / 2;
+            const sizeNumbers = radiusClock / 4;
+            const arrowWidth = radiusClock / 30;
+
+            // основание часов: жёлтый круг
+            const clockCircle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+            clockCircle.setAttribute("cx", radiusClock);
+            clockCircle.setAttribute("cy", radiusClock);
+            clockCircle.setAttribute("r", radiusClock);
+            clockCircle.setAttribute("fill", "#FCDF80");
+            clock.appendChild(clockCircle);
+
+            const r = radiusClock - sizeNumbers;
+            const numbersCenterX = radiusClock;
+            const numbersCenterY = radiusClock;
+
+            for (let i=1; i<=12; i++) {
+                const angle = i / 12 * Math.PI * 2;
+                const nx = numbersCenterX + Math.sin(angle) * r;
+                const ny = numbersCenterY - Math.cos(angle) * r;
+
+                // внутренние кружки
+                const numbers = document.createElementNS("http://www.w3.org/2000/svg","circle");
+                numbers.setAttribute("cx", nx);
+                numbers.setAttribute("cy", ny);
+                numbers.setAttribute("r", 25);
+                numbers.setAttribute("fill", "#2E8B57");
+                document.querySelector("svg").appendChild(numbers);
+                // цифры
+                const text = document.createElementNS("http://www.w3.org/2000/svg","text");
+                text.textContent = i;
+                text.setAttribute("x", nx);
+                text.setAttribute("y", ny);
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("dominant-baseline", "central");
+                text.setAttribute("text", 1);
+                text.style.fontSize = 24;
+                clock.appendChild(text);
+            }
+            // СТРЕЛКИ
+            // -часовая
+            const hourArrow = document.createElementNS("http://www.w3.org/2000/svg","line");
+            hourArrow.setAttribute("x1", radiusClock);
+            hourArrow.setAttribute("y1", radiusClock);
+            hourArrow.setAttribute("x2", radiusClock);
+            hourArrow.setAttribute("y2", radiusClock / 1.7); // длина стрелки
+            hourArrow.setAttribute("stroke", "black");
+            hourArrow.setAttribute("stroke-width", arrowWidth);
+            hourArrow.setAttribute("stroke-linecap", "round");
+            clock.appendChild(hourArrow);
+            // -минутная
+            const minuteArrow = document.createElementNS("http://www.w3.org/2000/svg","line");
+            minuteArrow.setAttribute("x1", radiusClock);
+            minuteArrow.setAttribute("y1", radiusClock);
+            minuteArrow.setAttribute("x2", radiusClock);
+            minuteArrow.setAttribute("y2", radiusClock * 0.4);
+            minuteArrow.setAttribute("stroke", "black");
+            minuteArrow.setAttribute("stroke-width", arrowWidth / 1.7);
+            minuteArrow.setAttribute("stroke-linecap", "round");
+            clock.appendChild(minuteArrow);
+            // -секундная
+            const secondArrow = document.createElementNS("http://www.w3.org/2000/svg","line");
+            secondArrow.setAttribute("x1", radiusClock);
+            secondArrow.setAttribute("y1", radiusClock);
+            secondArrow.setAttribute("x2", radiusClock);
+            secondArrow.setAttribute("y2", radiusClock * 0.2);
+            secondArrow.setAttribute("stroke", "black");
+            secondArrow.setAttribute("stroke-width", arrowWidth / 3);
+            secondArrow.setAttribute("stroke-linecap", "round");
+            clock.appendChild(secondArrow);
+
+            // ЭЛЕКТРОННЫЕ ЧАСЫ
+            const currTime = document.createElementNS("http://www.w3.org/2000/svg",'text');
+            currTime.setAttribute("id",'time');
+            currTime.setAttribute("x",radiusClock);
+            currTime.setAttribute("y",radiusClock / 2.5 + sizeNumbers);
+            currTime.setAttribute("text-anchor","middle");
+            currTime.style.fontSize = 24;
+            clock.appendChild(currTime);
+
+            hourArrow.style.transformOrigin = "center 200px";
+            minuteArrow.style.transformOrigin = "center 200px";
+            secondArrow.style.transformOrigin = "center 200px";
+
+            function updateClock () {
+                const time = new Date();
+
+                currTime.innerHTML = time.toLocaleTimeString();
+
+                let secondAngular = 6 * time.getSeconds() - 6;
+                let minuteAngular = 6 * (time.getMinutes() + (1/60) * time.getSeconds());
+                let hourAngular = 30 * (time.getHours() + (1/60) * time.getMinutes());
+
+                secondAngular += 6;
+                secondArrow.style.transform = "rotate(" + secondAngular + "deg)";
+                minuteAngular += 6 * (1/60);
+                minuteArrow.style.transform = "rotate(" + minuteAngular + "deg)";
+                hourAngular += 6 * (1/360);
+                hourArrow.style.transform = "rotate(" + hourAngular + "deg)";
+
+                setTimeout(updateClock, 1020 - time.getMilliseconds()); // планируем обновление стрелок при следующей смене секунды
+            }
+            updateClock();
+    </script>
+</body>
+</html>
